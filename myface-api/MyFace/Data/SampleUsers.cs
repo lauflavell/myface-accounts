@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MyFace.Models.Database;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using MyFace.Helpers;
 
 namespace MyFace.Data
 {
@@ -111,7 +115,7 @@ namespace MyFace.Data
             new List<string> { "Jane", "Iceton", "jiceton2q", "jiceton2q@lulu.com" },
             new List<string> { "Marjy", "Beadell", "mbeadell2r", "mbeadell2r@delicious.com" }
         };
-        
+
         public static IEnumerable<User> GetUsers()
         {
             return Enumerable.Range(0, NumberOfUsers).Select(CreateRandomUser);
@@ -119,12 +123,20 @@ namespace MyFace.Data
 
         private static User CreateRandomUser(int index)
         {
+            // Create random salt
+            byte[] salt =HashHelper.CreateSalt();
+
+            //Hash Password
+            string hashedPassword = HashHelper.HashPassword("Password123",salt);
+
             return new User
             {
                 FirstName = Data[index][0],
                 LastName = Data[index][1],
                 Username = Data[index][2],
                 Email = Data[index][3],
+                HashedPassword = hashedPassword,
+                Salt = salt,
                 ProfileImageUrl = ImageGenerator.GetProfileImage(Data[index][2]),
                 CoverImageUrl = ImageGenerator.GetCoverImage(index),
             };

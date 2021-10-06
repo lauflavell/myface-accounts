@@ -1,7 +1,17 @@
-﻿namespace MyFace.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using MyFace.Models.Request;
+using MyFace.Models.Response;
+using MyFace.Repositories;
+using MyFace.Services;
+
+namespace MyFace.Controllers
 {
-    public class LoginController
+    [ApiController]
+    [Route("/login")]
+    public class LoginController : ControllerBase
     {
+        //[HttpGet("")]
+
         
     }
 }

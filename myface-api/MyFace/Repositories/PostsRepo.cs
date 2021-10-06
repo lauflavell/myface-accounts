@@ -17,6 +17,7 @@ namespace MyFace.Repositories
         Post Create(CreatePostRequest post);
         Post Update(int id, UpdatePostRequest update);
         void Delete(int id);
+        
     }
     
     public class PostsRepo : IPostsRepo
@@ -105,5 +106,6 @@ namespace MyFace.Repositories
             _context.Posts.Remove(post);
             _context.SaveChanges();
         }
+
     }
 }
