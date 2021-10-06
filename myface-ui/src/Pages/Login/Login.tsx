@@ -12,6 +12,9 @@ export function Login(): JSX.Element {
     function tryLogin(event: FormEvent) {
         event.preventDefault();
         loginContext.logIn();
+        loginContext.username(username);
+        loginContext.password(password);
+        
     }
     
     return (

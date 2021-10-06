@@ -50,8 +50,14 @@ export async function fetchUser(userId: string | number): Promise<User> {
     return await response.json();
 }
 
-export async function fetchPosts(page: number, pageSize: number): Promise<ListResponse<Post>> {
-    const response = await fetch(`https://localhost:5001/feed?page=${page}&pageSize=${pageSize}`);
+export async function fetchPosts(page: number, pageSize: number, username: string, password: string): Promise<ListResponse<Post>> {
+    
+    const response = await fetch(`https://localhost:5001/feed?page=${page}&pageSize=${pageSize}`,{
+        headers: {
+            'Authorization': 'Basic '+btoa(`${username}:${password}`), 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    });
     return await response.json();
 }
 
