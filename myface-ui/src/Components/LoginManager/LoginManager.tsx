@@ -1,17 +1,16 @@
 ﻿import React, {createContext, ReactNode, useImperativeHandle, useState} from "react";
 import { updateShorthandPropertyAssignment } from "typescript";
 
+
 export const LoginContext = createContext({
     isLoggedIn: false,
     isAdmin: false,
     logIn: () => {},
     logOut: () => {},
     username: "",
+    setUsername: (username: string) => {},
     password: "",
-    // hasUsername: "",
-    // hasPassword: "",
-    // username: (username : string) => {},
-    // password: (password : string) => {},
+    setPassword: (password: string) => {},
 });
 
 interface LoginManagerProps {
@@ -20,8 +19,8 @@ interface LoginManagerProps {
 
 export function LoginManager(props: LoginManagerProps): JSX.Element {
     const [loggedIn, setLoggedIn] = useState(false);
-    // const [hasUsername, setUsername] = useState("");
-    // const [hasPassword, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     
     function logIn() {
@@ -31,26 +30,19 @@ export function LoginManager(props: LoginManagerProps): JSX.Element {
     }
     
     function logOut() {
+        
         setLoggedIn(false);
     }
-
-    // function username(username : string) {
-    //     setUsername(username);
-    // }
-
-    // function password(password : string) {
-    //     setPassword(password);
-    // }
     
     const context = {
         isLoggedIn: loggedIn,
         isAdmin: loggedIn,
         logIn: logIn,
         logOut: logOut,
-        // username: hasUsername,
-        // password: hasPassword,
-        // username: username,
-        // password: password,
+        username: username,
+        setUsername: setUsername,
+        password: password,
+        setPassword: setPassword,
     };
     
     return (

@@ -11,6 +11,7 @@ namespace MyFace.Services
     {
         public bool AuthenticateUser(string authorizationHeader);
         public ActionResult Authenticate(string authorizationHeader);
+        public string [] userCredentials(string authorizationHeader);
     }
     public class AuthService : IAuthService
     {
@@ -40,6 +41,16 @@ namespace MyFace.Services
                 return new UnauthorizedResult();
             }
             return null;
+        }
+
+       
+        public string [] userCredentials(string authorizationHeader){
+           //Decode authorization header and split into username and password.
+            string decodedUsernamePassword = AuthHelper.DecodeString(authorizationHeader);
+            string[] authDetailsArray = decodedUsernamePassword.Split(':');
+            string username = authDetailsArray[0];
+            string password = authDetailsArray[1];
+            return authDetailsArray;
         }
         public bool AuthenticateUser(string authorizationHeader)
         {

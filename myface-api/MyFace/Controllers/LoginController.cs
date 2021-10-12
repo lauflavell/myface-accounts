@@ -10,8 +10,19 @@ namespace MyFace.Controllers
     [Route("/login")]
     public class LoginController : ControllerBase
     {
-        //[HttpGet("")]
 
-        
+        private readonly IAuthService _authService;
+
+        [HttpGet("")]
+        public ActionResult login([FromHeader(Name = "Authorization")] string authorizationHeader)
+        {
+            var auth = _authService.Authenticate(authorizationHeader);
+            if (!(auth is null))
+            {
+                return auth;
+            
+            }
+        return auth;
+        }
     }
 }

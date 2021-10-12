@@ -69,8 +69,9 @@ namespace MyFace.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var post = _posts.Create(newPost);
+            var userCredentials = _authService.userCredentials(authorizationHeader);
+            var username = userCredentials[0];
+            var post = _posts.Create(newPost, username);
 
             var url = Url.Action("GetById", new { id = post.Id });
             var postResponse = new PostResponse(post);
