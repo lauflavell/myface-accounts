@@ -56,8 +56,9 @@ namespace MyFace.Controllers
             {
                 return BadRequest(ModelState);
             }
-        
-            var interaction = _interactions.Create(newUser);
+            var userCredentials = _authService.userCredentials(authorizationHeader);
+            var username = userCredentials[0];
+            var interaction = _interactions.Create(newUser, username);
 
             var url = Url.Action("GetById", new { id = interaction.Id });
             var responseViewModel = new InteractionResponse(interaction);

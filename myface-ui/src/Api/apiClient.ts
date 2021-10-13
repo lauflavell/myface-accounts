@@ -24,6 +24,11 @@ export interface Interaction {
     date: string;
 }
 
+export interface NewInteraction {
+    postId: number;
+    interactionType: number;
+}    
+
 export interface Post {
     id: number;
     message: string;
@@ -139,6 +144,24 @@ export async function createPost(LogOut: () => void, username: string, password:
             'Authorization': 'Basic ' + btoa(`${username}:${password}`)
         },
         body: JSON.stringify(newPost),
+    });
+    if (response.status === 401) {
+        LogOut();
+    }
+
+    if (!response.ok) {
+        throw new Error(await response.json())
+    }
+}
+
+export async function createInteraction(LogOut: () => void, username: string, password: string, newInteraction: NewInteraction) {
+    const response = await fetch(`https://localhost:5001/interactions/create`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Basic ' + btoa(`${username}:${password}`)
+        },
+        body: JSON.stringify(newInteraction),
     });
     if (response.status === 401) {
         LogOut();
