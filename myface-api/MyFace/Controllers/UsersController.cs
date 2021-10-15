@@ -18,7 +18,7 @@ namespace MyFace.Controllers
             _users = users;
             _authService = authService;
         }
-        
+
         [HttpGet("")]
         public ActionResult<UserListResponse> Search([FromQuery] UserSearchRequest searchRequest,
             [FromHeader(Name = "Authorization")] string authorizationHeader)
@@ -62,7 +62,7 @@ namespace MyFace.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             var user = _users.Create(newUser);
 
             var url = Url.Action("GetById", new { id = user.Id });
@@ -88,7 +88,7 @@ namespace MyFace.Controllers
             var user = _users.Update(id, update);
             return new UserResponse(user);
         }
-        
+
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id,
             [FromHeader(Name = "Authorization")] string authorizationHeader)
@@ -97,6 +97,12 @@ namespace MyFace.Controllers
             if (!(auth is null))
             {
                 return auth;
+            }
+            
+            var isAdmin = _authService.isUserAdmin(authorizationHeader);
+            if (!(isAdmin is null))
+            {
+                return isAdmin;
             }
 
             _users.Delete(id);

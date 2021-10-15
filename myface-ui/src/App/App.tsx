@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext } from 'react';
 import './App.scss';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { Feed } from "../Pages/Feed/Feed";
 import { Users } from "../Pages/Users/Users";
 import { NotFound } from "../Pages/NotFound/NotFound";
@@ -16,6 +16,7 @@ function Routes(): ReactElement {
     if (!loginContext.isLoggedIn) {
         return <Login />
     }
+    
 
     return (
         <Switch>
@@ -23,7 +24,6 @@ function Routes(): ReactElement {
             <Route exact path="/users" component={Users} />
             <Route exact path="/users/:id" component={Profile} />
             <Route exact path="/new-post" component={CreatePost} />
-            <Route exact path="/Login" component={Login} />
             <Route path="" component={NotFound} />
         </Switch>
     );

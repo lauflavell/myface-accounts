@@ -2,6 +2,12 @@
 
 namespace MyFace.Models.Database
 {
+
+    public enum RoleType
+    {
+        MEMBER = 0,
+        ADMIN = 1,
+    }
     public class User
     {
         public int Id { get; set; }
@@ -16,5 +22,6 @@ namespace MyFace.Models.Database
         public string CoverImageUrl { get; set; }
         public ICollection<Post> Posts { get; set; } = new List<Post>();
         public ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
+        public  RoleType Role { get; set; }
     }
 }

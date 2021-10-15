@@ -106,9 +106,16 @@ namespace MyFace.Controllers
             {
                 return auth;
             }
+            var isAdmin = _authService.isUserAdmin(authorizationHeader);
+            var isMember = _authService.isUserMember(authorizationHeader, id);
+            if ((!(isAdmin is null)) && (!(isMember is null)))
+            {
+                return isAdmin;
+            }
             
             _posts.Delete(id);
             return Ok();
+
         }
     }
 }

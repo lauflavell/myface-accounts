@@ -22,6 +22,8 @@ export interface Interaction {
     user: User;
     type: string;
     date: string;
+    likes: number;
+    dislikes: number;
 }
 
 export interface NewInteraction {
@@ -49,6 +51,10 @@ export interface LoginDetails {
     password: string;
     logOut: () => void;
 }
+export interface LoginResponse {
+    role: number;
+    userId: number;
+}
 
 export async function fetchUsers(LogOut: () => void, username: string, password: string, searchTerm: string, page: number, pageSize: number): Promise<ListResponse<User>> {
     const response = await fetch(`https://localhost:5001/users?search=${searchTerm}&page=${page}&pageSize=${pageSize}`, {
@@ -60,18 +66,6 @@ export async function fetchUsers(LogOut: () => void, username: string, password:
         LogOut();
     }
 
-    return await response.json();
-}
-
-export async function loginUser(LogOut: () => void, username: string, password: string) {
-    const response = await fetch(`https://localhost:5001/login`, {
-        headers: {
-            'Authorization': 'Basic ' + btoa(`${username}:${password}`)
-        }
-    });
-    if (response.status === 401) {
-        LogOut();
-    }
     return await response.json();
 }
 
@@ -154,7 +148,7 @@ export async function createPost(LogOut: () => void, username: string, password:
     }
 }
 
-export async function createInteraction(LogOut: () => void, username: string, password: string, newInteraction: NewInteraction) {
+export async function createInteraction(LogOut: () => void, username: string, password: string, newInteraction: NewInteraction): Promise<Interaction> {
     const response = await fetch(`https://localhost:5001/interactions/create`, {
         method: "POST",
         headers: {
@@ -170,4 +164,35 @@ export async function createInteraction(LogOut: () => void, username: string, pa
     if (!response.ok) {
         throw new Error(await response.json())
     }
+    return await response.json();
 }
+
+export async function deletePost(LogOut: () => void, username: string, password: string, postId: number) {
+    const response = await fetch(`https://localhost:5001/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+            'Authorization': 'Basic ' + btoa(`${username}:${password}`)
+        },
+        
+    });
+    if (response.status === 401) {
+        LogOut();
+    }
+    if (response.status === 403) {
+        window.alert("Access Denied")
+    }
+}
+
+export async function loginUser(LogOut: () => void, username: string, password: string): Promise<LoginResponse> {
+    const response = await fetch(`https://localhost:5001/login`, {
+        headers: {
+            'Authorization': 'Basic ' + btoa(`${username}:${password}`)
+        }
+    });
+    if (response.status === 401) {
+        LogOut();
+    }
+    return await response.json();
+    
+}
+

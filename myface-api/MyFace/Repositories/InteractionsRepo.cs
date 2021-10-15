@@ -13,6 +13,8 @@ namespace MyFace.Repositories
         Interaction GetById(int id);
         public Interaction Create(CreateInteractionRequest create, string username);
         void Delete(int id);
+        int CountLikes(int id);
+        int CountDislikes(int id);
     }
     
     public class InteractionsRepo : IInteractionsRepo
@@ -62,6 +64,16 @@ namespace MyFace.Repositories
             var interaction = GetById(id);
             _context.Interactions.Remove(interaction);
             _context.SaveChanges();
+        }
+
+        public int CountLikes(int id)
+        {
+            return _context.Interactions.Where(i => (i.PostId == id && i.Type == InteractionType.LIKE)).Count();
+        }
+
+        public int CountDislikes(int id)
+        {
+            return _context.Interactions.Where(i => (i.PostId == id && i.Type == InteractionType.DISLIKE)).Count();
         }
     }
 }

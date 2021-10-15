@@ -18,7 +18,7 @@ namespace MyFace.Controllers
             _interactions = interactions;
             _authService = authService;
         }
-    
+
         [HttpGet("")]
         public ActionResult<ListResponse<InteractionResponse>> Search([FromQuery] SearchRequest search,
             [FromHeader(Name = "Authorization")] string authorizationHeader)
@@ -39,7 +39,9 @@ namespace MyFace.Controllers
             [FromHeader(Name = "Authorization")] string authorizationHeader)
         {
             var interaction = _interactions.GetById(id);
-            return new InteractionResponse(interaction);
+            var likes = _interactions.CountLikes(id);
+            var dislikes = _interactions.CountDislikes(id);
+            return new InteractionResponse(interaction,likes, dislikes);
         }
 
         [HttpPost("create")]
@@ -60,8 +62,10 @@ namespace MyFace.Controllers
             var username = userCredentials[0];
             var interaction = _interactions.Create(newUser, username);
 
+            var likes = _interactions.CountLikes(interaction.PostId);
+            var dislikes = _interactions.CountDislikes(interaction.PostId);
             var url = Url.Action("GetById", new { id = interaction.Id });
-            var responseViewModel = new InteractionResponse(interaction);
+            var responseViewModel = new InteractionResponse(interaction, likes, dislikes);
             return Created(url, responseViewModel);
         }
 
@@ -73,6 +77,12 @@ namespace MyFace.Controllers
             if (!(auth is null))
             {
                 return auth;
+            }
+
+            var isAdmin = _authService.isUserAdmin(authorizationHeader);
+            if (!(isAdmin is null))
+            {
+                return isAdmin;
             }
 
             _interactions.Delete(id);

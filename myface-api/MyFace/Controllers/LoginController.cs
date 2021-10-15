@@ -12,17 +12,27 @@ namespace MyFace.Controllers
     {
 
         private readonly IAuthService _authService;
+        private readonly IUsersRepo _users;
+
+        public LoginController(IUsersRepo users, IAuthService authService)
+        {
+            _users = users;
+            _authService = authService;
+        }
 
         [HttpGet("")]
-        public ActionResult login([FromHeader(Name = "Authorization")] string authorizationHeader)
+        public ActionResult<LoginResponse> login([FromHeader(Name = "Authorization")] string authorizationHeader)
         {
             var auth = _authService.Authenticate(authorizationHeader);
             if (!(auth is null))
             {
                 return auth;
-            
+
             }
-        return auth;
+            var userCredentials = _authService.userCredentials(authorizationHeader);
+            var username = userCredentials[0];
+            var user = _users.GetUserForAuthentication(username);
+            return new LoginResponse(user);
         }
     }
 }

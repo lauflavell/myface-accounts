@@ -3,6 +3,7 @@ import {Page} from "../Page/Page";
 import {LoginContext} from "../../Components/LoginManager/LoginManager";
 import "./Login.scss";
 import { loginUser } from '../../Api/apiClient';
+import { resourceUsage } from 'process';
 
 export function Login(): JSX.Element {
     const loginContext = useContext(LoginContext);
@@ -12,11 +13,16 @@ export function Login(): JSX.Element {
     
     function tryLogin(event: FormEvent) {
         event.preventDefault();
-        loginUser(loginContext.logOut, username, password);
+        loginUser(loginContext.logOut, username, password)
+        .then(response => {
+            loginContext.setRole(response.role)
+            loginContext.setUserId(response.userId)
+        });
         loginContext.logIn();
         loginContext.setUsername(username);
         loginContext.setPassword(password);
         
+       
     }
     
     return (

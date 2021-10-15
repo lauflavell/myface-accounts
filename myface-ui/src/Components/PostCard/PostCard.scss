@@ -41,4 +41,8 @@
     @include labelFont;
     padding: 0 $spacing-medium;
   }
+
+  .active {
+    border: 1px solid blue;
+  }
 }

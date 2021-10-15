@@ -17,6 +17,7 @@ namespace MyFace.Repositories
         public Post Create(CreatePostRequest post, string username);
         Post Update(int id, UpdatePostRequest update);
         void Delete(int id);
+        public Post GetUserByPostId(int postId);
         
     }
     
@@ -109,5 +110,10 @@ namespace MyFace.Repositories
             _context.SaveChanges();
         }
 
+        public Post GetUserByPostId(int postId) 
+        {
+           var post = _context.Posts.Where(p => p.Id == postId).Single();
+           return post;
+        }
     }
 }
